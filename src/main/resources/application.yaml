@@ -1,21 +1,10 @@
 info:
   app:
-    description: Chemview
+    description: ChemView
     name: chemview
     version: 1.0.0
-management:
-  endpoint:
-    health:
-      enabled: true
-    info:
-      enabled: true
-  endpoints:
-    enabled-by-default: false
-    web:
-      exposure:
-        include: openapi, swagger-ui
 apiverve:
   periodic-table:
-    key: ${API_KEY:YOUR_PERIODIC_TABLE_KEY}
+    key: ${PERIODIC_TABLE_API_KEY:YOUR_PERIODIC_TABLE_KEY}
 server:
   port: 5001
