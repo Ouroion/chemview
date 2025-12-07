@@ -16,10 +16,17 @@ public class Main {
     static Dotenv dotenv = Dotenv.load();
     private static final ObjectMapper objectMapper = new ObjectMapper();
     static String apiKey = dotenv.get("PERIODIC_TABLE_API_KEY");
-    // Should be: https://api.apiverve.com/v1/periodictable
     static String ptURL = dotenv.get("PERIODIC_TABLE_URL");
 
     public static void main(String[] args) throws Exception {
+        // Debug: Print configuration
+        System.out.println("=== Configuration Debug ===");
+        System.out.println("API URL: " + ptURL);
+        System.out.println("API Key present: " + (apiKey != null && !apiKey.isEmpty()));
+        System.out.println("API Key length: " + (apiKey != null ? apiKey.length() : 0));
+        System.out.println("API Key first 10 chars: " + (apiKey != null && apiKey.length() > 10 ? apiKey.substring(0, 10) + "..." : apiKey));
+        System.out.println("===========================\n");
+
         JsonNode response = makePeriodicTableRequest();
         System.out.println("Response: " + response.toPrettyString());
     }
@@ -28,9 +35,8 @@ public class Main {
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter a periodic table element (symbol like 'H' or 'He')");
 
-        String element = scan.nextLine();
+        String element = scan.nextLine().trim();
 
-        // APIVerve uses 'symbol' parameter, not 'name'
         String encodedElement = URLEncoder.encode(element, StandardCharsets.UTF_8);
         String ptURLParams = ptURL + "?name=" + encodedElement;
 
@@ -40,7 +46,13 @@ public class Main {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("x-api-key", apiKey);
-        // DON'T use setDoOutput for GET requests
+        conn.setRequestProperty("Accept", "application/json");
+
+        // Debug: Print all request headers
+        System.out.println("Request headers:");
+        conn.getRequestProperties().forEach((key, value) ->
+                System.out.println("  " + key + ": " + value)
+        );
 
         return readResponse(conn);
     }
@@ -48,6 +60,7 @@ public class Main {
     private static JsonNode readResponse(HttpURLConnection conn) throws Exception {
         int responseCode = conn.getResponseCode();
         System.out.println("Response code: " + responseCode);
+        System.out.println("Response message: " + conn.getResponseMessage());
 
         if (responseCode == HttpURLConnection.HTTP_OK) {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
@@ -66,9 +79,9 @@ public class Main {
                 while ((inputLine = in.readLine()) != null) {
                     errorResponse.append(inputLine);
                 }
-                System.err.println("Error response: " + errorResponse.toString());
+                System.err.println("Error response body: " + errorResponse.toString());
             } catch (Exception e) {
-                System.err.println("Could not read error response");
+                System.err.println("Could not read error response: " + e.getMessage());
             }
             throw new Exception("API request failed with response code: " + responseCode);
         }
