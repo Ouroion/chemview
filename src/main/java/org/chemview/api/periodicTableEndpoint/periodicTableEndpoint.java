@@ -53,7 +53,7 @@ public class periodicTableEndpoint {
         if(input.length() == 1 || input.length() == 2) {
             int i = 0;
             while(i < arr.size()){
-                if(Objects.equals(arr.get(i).getSymbol(), input)){
+                if(arr.get(i).getSymbol().equalsIgnoreCase(input)){
                     return arr.get(i).getName();
                 }
                 else{
