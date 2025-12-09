@@ -1,15 +1,11 @@
 package org.chemview.api;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
-
-import static org.chemview.api.periodicTableEndpoint.periodicTableEndpoint.readResponse;
 
 public class pubChemEndpoint {
     private static final String pcURL = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/";
@@ -45,7 +41,5 @@ public class pubChemEndpoint {
 
         return response;
     }
-
-
 
 }
