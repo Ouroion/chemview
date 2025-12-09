@@ -92,7 +92,7 @@ public class periodicTableEndpoint {
         return readResponse(conn);
     }
 
-    private static JsonNode readResponse(HttpURLConnection conn) throws Exception {
+    public static JsonNode readResponse(HttpURLConnection conn) throws Exception {
         int responseCode = conn.getResponseCode();
         System.out.println("Response code: " + responseCode);
         System.out.println("Response message: " + conn.getResponseMessage());
