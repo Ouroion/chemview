@@ -32,7 +32,7 @@ public class periodicTableEndpoint {
         String name = "";
         String symbol = "";
 
-        File file = new File("src/main/java/org/chemview/api/elements.txt");
+        File file = new File("src/main/java/org/chemview/resources/elements.txt");
 
         try{
             Scanner scan = new Scanner(file);
